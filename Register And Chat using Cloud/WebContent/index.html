@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>chatcss</title>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.11/css/all.css">
+
+<script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAjrp6GBuE46ON58exJuRbt5RpVYyexzSc",
+    authDomain: "chatcss-68c3b.firebaseapp.com",
+    databaseURL: "https://chatcss-68c3b.firebaseio.com",
+    projectId: "chatcss-68c3b",
+    storageBucket: "chatcss-68c3b.appspot.com",
+    messagingSenderId: "1008827405091"
+  };
+  firebase.initializeApp(config);
+</script>
+
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="custom.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>	
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<form type="get" action="chat.html">
+<div class="main-section">
+	<div class="row border-chat">
+		<div class="col-md-12 col-sm-12 col-xs-12 first-section">
+			<div class="row">
+				<div class="col-md-8 col-sm-6 col-xs-6 left-first-section">
+					<p><i class="fas fa-sign-in-alt"></i>&nbsp; Register</p>
+				</div>
+				<div class="col-md-4 col-sm-6 col-xs-6 right-first-section">
+	
+					<a href="#"><i class="fa fa-times" aria-hidden="true"></i></a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row border-chat">
+		<div class="col-md-12 col-sm-12 col-xs-12 second-section">
+			<div class="chat-section">
+			
+				<ul>
+				
+					<li>
+						<input type="text" placeholder="* Enter name" name="user_name" id="user_name" required>
+					</li>
+					<li>
+						<input type="number" placeholder="* Enter mobile no" name="mobile" id="mobile" min="999999999" required>
+					</li>
+					<li>
+						<input type="email" placeholder="* Enter email" name="email" id="email" required>
+					</li>
+					<li>
+						<textarea placeholder="* Enter desc" name="desc" id="desc" required></textarea>
+					</li>
+					
+				</ul>
+					
+			</div>
+		</div>
+	</div>
+	<div class="row border-chat">
+		<div class="col-md-12 col-sm-12 col-xs-12 third-section">
+			<div class="text-bar">
+				<input type="submit" value="Submit" onclick="save_user();">
+			</div>
+		</div>
+	</div>
+</div>
+</form>
+
+
+<script>
+
+var tblUsers = document.getElementById('tbl_users_list');
+var databaseRef = firebase.database().ref('users/');
+var rowIndex = 1;
+
+
+databaseRef.once('value',function(snapshot){
+	snapshot.forEach(function(childSnapshot){
+		
+		var childData = childSnapshot.val();
+		var childMobile = childSnapshot.val();
+		var childEmail = childSnapshot.val();
+		var childDesc = childSnapshot.val();
+		
+		var row = tblUsers.insertRow(rowIndex);
+		
+		var cellName = row.insertCell(0);
+		var cellMobile = row.insertCell(1);
+		var cellEmail = row.insertCell(2);
+		var cellDesc = row.insertCell(3);
+		
+		
+		
+		cellName.appendChild(document.createTextNode(childData.user_name));
+		cellMobile.appendChild(document.createTextNode(childMobile.mobile));
+		cellEmail.appendChild(document.createTextNode(childEmail.email));
+		cellDesc.appendChild(document.createTextNode(childDesc.desc));
+		
+		rowIndex = rowIndex + 1;
+	})
+})
+
+
+function save_user() {
+	var user_name = document.getElementById('user_name').value;
+	var mobile = document.getElementById('mobile').value;
+	var email = document.getElementById('email').value;
+	var desc = document.getElementById('desc').value;
+	var uid = firebase.database().ref().child('users').push().key;
+	
+	var data = {
+			user_id: uid,
+			user_name: user_name,
+			mobile: mobile,
+			email: email,
+			desc: desc
+	}
+	var updates = {};
+	updates['/users/'+ uid] = data;
+	firebase.database().ref().update(updates);
+	
+	alert('User is addded to chat');
+	reload_page();
+}
+
+function reload_page(){
+	window.location.reload();
+	
+}
+
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+    	$(".left-first-section").click(function(){
+            $('.main-section').toggleClass("open-more");
+        });
+    });
+   
+    $(document).ready(function(){
+    	$(".fa-times").click(function(){
+    		$('.main-section').toggleClass("open-more");
+    	});
+    });
+    	
+    
+    </script>
+</body>
+<style>
+
+input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+input[type=number], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=email], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+
+input[type=submit] {
+    width: 100%;
+    background-color: #e0a025;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: #0080ff;
+  
+}
+input[type=textarea] {
+    width: 100%;
+    
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+</style>
+</html>
